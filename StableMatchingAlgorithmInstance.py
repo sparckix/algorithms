@@ -20,6 +20,11 @@ womanPref[1] = [3,0,4,2,1]
 womanPref[2] = [2,4,1,0,3]
 womanPref[3] = [1,3,4,0,2]
 womanPref[4] = [3,2,4,1,0]
+Ranking = [[0 for x in range(5)] for x in range(5)]
+
+for key in womanPref:
+    for idx,man in enumerate(womanPref[key]):
+        Ranking[key][man] = idx
 
 # current man with whom a woman is married -- used by women. Initially null (-1) for all women
 current = [-1,-1,-1,-1,-1]
@@ -40,7 +45,9 @@ while free:
 
     if current[chosen_woman] == -1:
         current[chosen_woman] = man
-    elif womanPref[chosen_woman].index(current[chosen_woman]) > womanPref[chosen_woman].index(man):
+    # This is not efficient. It takes O(n) to find this comparison. The array ranking computed beforehand solves the problem
+    #elif womanPref[chosen_woman].index(current[chosen_woman]) < womanPref[chosen_woman].index(man):
+    elif Ranking[chosen_woman][current[chosen_woman]] <= Ranking[chosen_woman][man]:
         free.append(man)
     else:
         free.append(current[chosen_woman])
@@ -48,4 +55,3 @@ while free:
 
 for idx, value in enumerate(current):
     print "Man " + str(value)  + " is matched with Woman " + str(idx)
-
